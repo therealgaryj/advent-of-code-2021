@@ -1,4 +1,4 @@
-package main
+	package main
 
 import (
 	"fmt"
@@ -72,42 +72,67 @@ func partOne() {
 func partTwo() {
 	fmt.Println("#### Part Two ####")
 
-	mostSigBits := make([]rune, len(input[0]))
-
-	for x := 0; x < len(input[0]); x++ {
-
-		countOfZero := 0
-
-		for y := 0; y < len(input); y++ {
-			bit := string(([]rune(input[y]))[x])
-
-			if bit == "0" {
-				countOfZero = countOfZero + 1
-			}
-		}
-
-		if countOfZero > (len(input) / 2) {
-			mostSigBits[x] = '1'
-		} else {
-			mostSigBits[x] = '0'
-		}
+	betterInput := make([][]rune, len(input))
+	for x, line := range input {
+		betterInput[x] = []rune(line)
 	}
 
-	gammaString := string(mostSigBits)
-	epsilonString := ""
+	o2 := filterInput(betterInput, 0, true)
+	co2 := filterInput(betterInput, 0, false)
 
-	for _, bit := range mostSigBits {
-		if bit == '0' {
-			epsilonString = epsilonString + "1"
-		} else {
-			epsilonString = epsilonString + "0"
-		}
-	}
+	decimalO2, _ := strconv.ParseInt(o2, 2, 32)
+	decimalCo2, _ := strconv.ParseInt(co2, 2, 32)
+	fmt.Printf("O2: %s / %d, CO2: %s / %d, Product: %d\n", o2, decimalO2, co2, decimalCo2, decimalO2 * decimalCo2)
 }
 
-func findMostSig([][]rune inputs, iteration int) string {
+func filterInput(inputs [][]rune, iteration int, isO2 bool) string {
 
-	filtered := make([][]rune)
+	zeroMostSig := make([][]rune, 0)
+	oneMostSig := make([][]rune, 0)
 
-	for _,
+	for _, diagnosticLine := range inputs {
+		if diagnosticLine[iteration] == '0' {
+			zeroMostSig = append(zeroMostSig, diagnosticLine)
+		} else {
+			oneMostSig = append(oneMostSig, diagnosticLine)
+		}
+	}
+
+	nextIteration := iteration + 1
+
+	if len(zeroMostSig) > len(oneMostSig) {
+		if len(zeroMostSig) == 1 {
+			return string(zeroMostSig[0])
+		} else {
+			if isO2 {
+				return filterInput(zeroMostSig, nextIteration, isO2)
+			} else {
+				return filterInput(oneMostSig, nextIteration, isO2)
+			}
+		}
+	} else if len(zeroMostSig) < len(oneMostSig) {
+		if len(oneMostSig) == 1 {
+			return string(oneMostSig[0])
+		} else {
+			if isO2 {
+				return filterInput(oneMostSig, nextIteration, isO2)
+			} else {
+				return filterInput(zeroMostSig, nextIteration, isO2)
+			}
+		}
+	} else { //equal
+		if isO2 {
+			if len(oneMostSig) == 1 {
+				return string(oneMostSig[0])
+			} else {
+				return filterInput(oneMostSig, nextIteration, isO2)
+			}
+		} else {
+			if len(zeroMostSig) == 1 {
+				return string(zeroMostSig[0])
+			} else {
+				return filterInput(zeroMostSig, nextIteration, isO2)
+			}
+		}
+	}
 }

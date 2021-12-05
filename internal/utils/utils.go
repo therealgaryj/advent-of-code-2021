@@ -49,3 +49,20 @@ func ConvertInputToInts(input []string) []int {
 
 	return newInput
 }
+
+func IntArrayContains(haystack []int, needle int) bool {
+	for _, candidate := range haystack {
+		if candidate == needle {
+			return true
+		}
+	}
+
+	return false
+}
+
+func Diff(a, b int) int {
+	if a < b {
+		return b - a
+	}
+	return a - b
+}
