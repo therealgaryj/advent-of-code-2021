@@ -19,12 +19,12 @@ func main() {
 	}
 	rawInput := strings.Split(string(inputFile), ",")
 
-	input = make([]int, len(rawInput))
+	input = make([]int, 9)
 
-	for x, fish := range rawInput {
+	for _, fish := range rawInput {
 		fishAsInt, _ := strconv.Atoi(fish)
 
-		input[x] = fishAsInt
+		input[fishAsInt] += 1
 	}
 
 	partOne()
@@ -36,36 +36,45 @@ func partOne() {
 
 	fishes := passDays(80)
 
-	fmt.Printf("Total Fish: %d\n", len(fishes))
+	fmt.Printf("Total Fish: %d\n", countFish(fishes))
 }
 
-func passDays(days int) []int {
-
-	fishes := make([]int, len(input))
-
-	for x, fish := range input {
-		fishes[x] = fish
-	}
-
-	for x := 0; x < days; x++ {
-		fmt.Printf("%d, ", x)
-		for y, fish := range fishes {
-			if fish == 0 {
-				fishes[y] = 6
-				fishes = append(fishes, 8)
-			} else {
-				fishes[y] = fish - 1
-			}
-		}
-	}
-
-	return fishes
-}
 func partTwo() {
 	fmt.Println("#### Part Two ####")
 
 	fishes := passDays(256)
 
-	fmt.Printf("Total Fish: %d\n", len(fishes))
+	fmt.Printf("Total Fish: %d\n", countFish(fishes))
 
+}
+
+func countFish(fishes []int) interface{} {
+	count := 0
+	for _, fish := range fishes {
+		count = count + fish
+	}
+
+	return count
+}
+
+func passDays(daysToPass int) []int {
+
+	fishes := make([]int, 9)
+
+	for days, count := range input {
+		fishes[days] = count
+	}
+
+	for x := 0; x < daysToPass; x++ {
+		//fmt.Printf("%d, ", x)
+
+		toGiveBirth := fishes[0]
+		for y := 1; y < len(fishes); y++ {
+			fishes[y-1] = fishes[y]
+		}
+		fishes[8] = toGiveBirth
+		fishes[6] = fishes[6] + toGiveBirth
+	}
+
+	return fishes
 }
