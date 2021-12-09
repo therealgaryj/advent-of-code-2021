@@ -41,7 +41,7 @@ func main() {
 	for _, position := range input {
 		crabPositions[position] = crabPositions[position] + 1
 	}
-	
+
 	partOne()
 	partTwo()
 }
