@@ -66,3 +66,20 @@ func Diff(a, b int) int {
 	}
 	return a - b
 }
+
+func Push(stack *[]rune, element rune) {
+	*stack = append(*stack, element)
+}
+
+func Pop(stack *[]rune) (rune, bool) {
+
+	if len(*stack) == 0 {
+		return 0, false
+	}
+
+	lastIndex := len(*stack) - 1
+	popped := (*stack)[lastIndex]
+	*stack = (*stack)[:lastIndex]
+
+	return popped, true
+}

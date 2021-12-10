@@ -66,8 +66,6 @@ func passDays(daysToPass int) []int {
 	}
 
 	for x := 0; x < daysToPass; x++ {
-		//fmt.Printf("%d, ", x)
-
 		toGiveBirth := fishes[0]
 		for y := 1; y < len(fishes); y++ {
 			fishes[y-1] = fishes[y]
